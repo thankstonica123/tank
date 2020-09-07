@@ -18,7 +18,7 @@ public class Maim {
         jf.setBounds((width-800)/2,(height-800)/2,800,800);
 
         jf.setResizable(false);
-        jf.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         //将面板放入窗体
         jf.add(new MainPanel());

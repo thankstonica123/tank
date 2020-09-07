@@ -1,7 +1,10 @@
 package com.thankstonica.snake;
 
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -16,11 +19,24 @@ public class MainPanel extends JPanel {
     int[] snakeX = new int[600];
     int[] snakeY = new int[600];
 
+    //食物
+    int eggX;
+    int eggY;
+
     //小蛇方向
     String direction;
 
     //游戏启停
     boolean isStart = false;
+
+    //定时器
+    Timer timer;
+
+    //计分器
+    int score;
+
+    //小蛇死亡状态
+    boolean isDead;
 
     //初始化信息
     public void init(){
@@ -35,6 +51,14 @@ public class MainPanel extends JPanel {
         snakeX[2] = 100;
         snakeY[2] = 275;
         direction = "R";
+
+        eggX = 325;
+        eggY = 325;
+
+        score = 0;
+
+        isDead = false;
+
     }
 
     public MainPanel(){
@@ -45,13 +69,69 @@ public class MainPanel extends JPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 int keyCode = e.getKeyCode();
-                if(keyCode == 32){
-                    isStart = !isStart;
-                    repaint();
+                if(keyCode == KeyEvent.VK_SPACE){
+                    if(isDead){
+                        init();
+                    }else{
+                        isStart = !isStart;
+                        repaint();
+                    }
+
                 }
                 System.out.println(keyCode);
+                if(keyCode == KeyEvent.VK_UP) direction = "U";
+                if(keyCode == KeyEvent.VK_DOWN) direction = "D";
+                if(keyCode == KeyEvent.VK_LEFT) direction = "L";
+                if(keyCode == KeyEvent.VK_RIGHT) direction = "R";
+
             }
         });
+        //初始化定时器
+        timer = new Timer(100, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //每100毫秒执行一次
+                if(isStart && !isDead){//游戏是开始，则每100毫秒执行一次
+                    //蛇开始动，先动身子，再动头
+                    for (int i = length - 1;i>0; i--) {
+                        snakeX[i] = snakeX[i-1];
+                        snakeY[i] = snakeY[i-1];
+                    }
+
+                    switch (direction){
+                        case "R":snakeX[0] = snakeX[0]+25;break;
+                        case "D":snakeY[0] = snakeY[0]+25;break;
+                        case "L":snakeX[0] = snakeX[0]-25;break;
+                        case "U":snakeY[0] = snakeY[0]-25;break;
+                    }
+
+                    for (int i = 1; i < length; i++) {
+                        if(snakeX[0] == snakeX[i] && snakeY[0] == snakeY[i]){
+                            isDead = true;
+                        }
+                    }
+
+                    //设置边界
+                    if(snakeX[0] > 750)snakeX[0]=25;
+                    if(snakeX[0] < 25)snakeX[0]=750;
+                    if(snakeY[0] < 125)snakeY[0]=725;
+                    if(snakeY[0] > 725)snakeY[0]=125;
+
+                    if(eggX == snakeX[0] && eggY == snakeY[0]){
+                        length++;
+                        eggX = ((int) (Math.random() * 30)+1)*25;//[1-30]
+                        eggY = ((int) (Math.random() * 25)+5)*25;//[5-29]/[1-25]
+                        score += 10;
+                    }
+
+                    //刷新
+                    repaint();
+
+
+                }
+            }
+        });
+        timer.start();
     }
 
     @Override
@@ -79,11 +159,22 @@ public class MainPanel extends JPanel {
         for (int i = 1; i < length; i++) {
             Images.bodyImg.paintIcon(this,g,snakeX[i],snakeY[i]);
         }
+        Images.foodImg.paintIcon(this,g,eggX,eggY);
 
-        if(!isStart){
+        if(!isStart && !isDead){
             g.setColor(new Color(255, 31, 46));
             g.setFont(new Font("微软雅黑",Font.BOLD,40));
             g.drawString("点击空格开始",250,250);
+        }
+
+        g.setColor(new Color(255, 31, 46));
+        g.setFont(new Font("微软雅黑",Font.BOLD,20));
+        g.drawString("分数："+score,600,60);
+
+        if(isDead){
+            g.setColor(new Color(22, 25, 255));
+            g.setFont(new Font("微软雅黑",Font.BOLD,40));
+            g.drawString("小蛇死亡，点击空格重新开始",150,250);
         }
     }
 }

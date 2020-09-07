@@ -37,6 +37,11 @@ public class Images {
     public static URL leftURL = Images.class.getResource("/images/left.png");
     // 将图片封装成对象
     public static ImageIcon leftImg = new ImageIcon(leftURL);
+
+    //将图片路径封装成对象
+    public static URL foodURL = Images.class.getResource("/images/food.png");
+    // 将图片封装成对象
+    public static ImageIcon foodImg = new ImageIcon(foodURL);
 }
 
 
