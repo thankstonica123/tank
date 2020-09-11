@@ -12,13 +12,15 @@ import java.awt.event.WindowEvent;
 public class TankFrame extends Frame{
 
     // 坦克初始位置
-    int x = 200,y = 200;
+    // int x = 200,y = 200;
+    // new 出自己的tank
+    Tank tank = new Tank(200,200,Direction.DOWN);
 
     // 坦克速度
-    public static final int SPEED = 10;
+    // public static final int SPEED = 10;
 
     // 坦克方向
-    Direction dir = Direction.DOWN;
+    // Direction dir = Direction.DOWN;
 
     public TankFrame(){
         this.setSize(800,600);
@@ -36,22 +38,8 @@ public class TankFrame extends Frame{
 
     @Override
     public void paint(Graphics g) {
-        g.fill3DRect(x,y,50,50,false);
-        switch (dir){
-            case RIGHT:
-                x += SPEED;
-                break;
-            case DOWN:
-                y += SPEED;
-                break;
-            case LEFT:
-                x -= SPEED;
-                break;
-            case UP:
-                y -= SPEED;
-                break;
-        }
-
+        // tank 能更好地知道如何画自己
+        tank.paint(g);
     }
 
     class MyKeyListener extends KeyAdapter{
@@ -86,10 +74,10 @@ public class TankFrame extends Frame{
         }
 
         private void setMainTankDir() {
-            if(bR){dir = Direction.RIGHT;}
-            if(bD){dir = Direction.DOWN;}
-            if(bL){dir = Direction.LEFT;}
-            if(bU){dir = Direction.UP;}
+            if(bR) tank.setDir(Direction.RIGHT);
+            if(bD) tank.setDir(Direction.DOWN);
+            if(bL) tank.setDir(Direction.LEFT);
+            if(bU) tank.setDir(Direction.UP);
         }
     }
 }
