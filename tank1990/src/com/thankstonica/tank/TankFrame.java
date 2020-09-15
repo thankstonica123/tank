@@ -52,11 +52,20 @@ public class TankFrame extends Frame{
         @Override
         public void keyPressed(KeyEvent e) {
             int keyCode = e.getKeyCode();
+
             switch (keyCode){
-                case KeyEvent.VK_RIGHT:bR = true;break;
-                case KeyEvent.VK_DOWN:bD = true;break;
-                case KeyEvent.VK_LEFT:bL = true;break;
-                case KeyEvent.VK_UP:bU= true;break;
+                case KeyEvent.VK_RIGHT:
+                    bR = true;
+                    break;
+                case KeyEvent.VK_DOWN:
+                    bD = true;
+                    break;
+                case KeyEvent.VK_LEFT:
+                    bL = true;
+                    break;
+                case KeyEvent.VK_UP:
+                    bU = true;
+                    break;
             }
             setMainTankDir();
         }
@@ -65,19 +74,37 @@ public class TankFrame extends Frame{
         public void keyReleased(KeyEvent e) {
             int keyCode = e.getKeyCode();
             switch (keyCode){
-                case KeyEvent.VK_RIGHT:bR = false;break;
-                case KeyEvent.VK_DOWN:bD = false;break;
-                case KeyEvent.VK_LEFT:bL = false;break;
-                case KeyEvent.VK_UP:bU= false;break;
+                case KeyEvent.VK_RIGHT:
+                    bR = false;
+                    break;
+                case KeyEvent.VK_DOWN:
+                    bD = false;
+                    break;
+                case KeyEvent.VK_LEFT:
+                    bL = false;
+                    break;
+                case KeyEvent.VK_UP:
+                    bU = false;
+                    break;
             }
             setMainTankDir();
         }
 
         private void setMainTankDir() {
-            if(bR) tank.setDir(Direction.RIGHT);
-            if(bD) tank.setDir(Direction.DOWN);
-            if(bL) tank.setDir(Direction.LEFT);
-            if(bU) tank.setDir(Direction.UP);
+            if(!bR && !bD && !bL && !bU){
+                tank.setMoving(false);
+            }else{
+                tank.setMoving(true);
+                if(bR) tank.setDir(Direction.RIGHT);
+                if(bD) tank.setDir(Direction.DOWN);
+                if(bL) {
+                    tank.setDir(Direction.LEFT);
+                }
+                if(bU) {
+                    tank.setDir(Direction.UP);
+                }
+            }
+
         }
     }
 }

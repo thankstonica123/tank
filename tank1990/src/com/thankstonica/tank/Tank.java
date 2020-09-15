@@ -8,6 +8,20 @@ import java.awt.*;
 public class Tank {
 
     private int x,y;
+    private Direction dir = Direction.UP;
+    private static final int SPEED = 10;
+
+    public boolean isMoving() {
+        return moving;
+    }
+
+    public void setMoving(boolean moving) {
+        this.moving = moving;
+    }
+
+    private boolean moving = false;
+
+
 
     public Direction getDir() {
         return dir;
@@ -16,9 +30,6 @@ public class Tank {
     public void setDir(Direction dir) {
         this.dir = dir;
     }
-
-    private Direction dir = Direction.DOWN;
-    private static final int SPEED = 10;
 
     public Tank(int x,int y,Direction dir){
         this.x = x;
@@ -29,6 +40,13 @@ public class Tank {
 
     public void paint(Graphics g) {
         g.fill3DRect(x,y,50,50,false);
+        move();
+
+    }
+
+    private void move() {
+        if(!moving) return;
+
         switch (dir){
             case RIGHT:
                 x += SPEED;
@@ -38,10 +56,13 @@ public class Tank {
                 break;
             case LEFT:
                 x -= SPEED;
+                System.out.println("x -= SPEED;");
                 break;
             case UP:
                 y -= SPEED;
+                System.out.println("y -= SPEED;");
                 break;
         }
+
     }
 }
