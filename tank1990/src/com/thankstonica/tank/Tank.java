@@ -9,7 +9,8 @@ public class Tank {
 
     private int x,y;
     private Direction dir = Direction.UP;
-    private static final int SPEED = 10;
+    private TankFrame tf ;
+    private static final int SPEED = 5;
 
     public boolean isMoving() {
         return moving;
@@ -31,14 +32,16 @@ public class Tank {
         this.dir = dir;
     }
 
-    public Tank(int x,int y,Direction dir){
+    public Tank(int x,int y,Direction dir,TankFrame tf){
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.tf = tf;
     }
 
 
     public void paint(Graphics g) {
+        g.setColor(Color.BLUE);
         g.fill3DRect(x,y,50,50,false);
         move();
 
@@ -56,13 +59,15 @@ public class Tank {
                 break;
             case LEFT:
                 x -= SPEED;
-                System.out.println("x -= SPEED;");
                 break;
             case UP:
                 y -= SPEED;
-                System.out.println("y -= SPEED;");
                 break;
         }
 
+    }
+
+    public void file(){
+       this.tf.bullets.add(new Bullet(this.x,this.y,this.dir));
     }
 }

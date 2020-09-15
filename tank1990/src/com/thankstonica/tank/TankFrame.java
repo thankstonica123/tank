@@ -5,6 +5,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by thankstonica on 2020/9/6.
@@ -14,7 +16,9 @@ public class TankFrame extends Frame{
     // 坦克初始位置
     // int x = 200,y = 200;
     // new 出自己的tank
-    Tank tank = new Tank(200,200,Direction.DOWN);
+    Tank tank = new Tank(200,200,Direction.DOWN,this);
+    Bullet bullet = new Bullet(300,300,Direction.DOWN);
+    List<Bullet> bullets = new ArrayList<Bullet>();
 
     // 坦克速度
     // public static final int SPEED = 10;
@@ -22,8 +26,10 @@ public class TankFrame extends Frame{
     // 坦克方向
     // Direction dir = Direction.DOWN;
 
+    private static int GAME_WIDTH = 800,GAME_HEIGHT = 600;
+
     public TankFrame(){
-        this.setSize(800,600);
+        this.setSize(GAME_WIDTH,GAME_HEIGHT);
         this.setTitle("TankWar1990");
         this.setResizable(false);
         this.setVisible(true);
@@ -40,6 +46,23 @@ public class TankFrame extends Frame{
     public void paint(Graphics g) {
         // tank 能更好地知道如何画自己
         tank.paint(g);
+        for(Bullet bullet:bullets){
+            bullet.paint(g);
+        }
+    }
+
+    // 双缓冲消除闪烁
+    Image offScreenImage = null;
+    @Override
+    public void update(Graphics g) {
+        if(offScreenImage == null){
+            offScreenImage = this.createImage(GAME_WIDTH,GAME_HEIGHT);
+        }
+        Graphics gOffScreen = offScreenImage.getGraphics();
+        gOffScreen.setColor(Color.black);
+        gOffScreen.fillRect(0,0,GAME_WIDTH,GAME_HEIGHT);
+        paint(gOffScreen);
+        g.drawImage(offScreenImage,0,0,null);
     }
 
     class MyKeyListener extends KeyAdapter{
@@ -65,6 +88,9 @@ public class TankFrame extends Frame{
                     break;
                 case KeyEvent.VK_UP:
                     bU = true;
+                    break;
+                case KeyEvent.VK_CONTROL:
+                    tank.file();
                     break;
             }
             setMainTankDir();
