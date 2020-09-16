@@ -10,11 +10,14 @@ public class Bullet {
     private final int SPEED = 10;
     private final int WIDTH = 5,HEIGHT =5;
     private Direction dir = Direction.DOWN;
+    Boolean live = true;
+    TankFrame tf = null;
 
-    public Bullet(int x, int y, Direction dir) {
+    public Bullet(int x, int y, Direction dir,TankFrame tf) {
         this.x = x;
         this.y = y;
         this.dir = dir;
+        this.tf = tf;
     }
 
     public void paint(Graphics g) {
@@ -38,6 +41,10 @@ public class Bullet {
             case UP:
                 y -= SPEED;
                 break;
+        }
+        if(x < 0 || y < 0 || x > tf.GAME_WIDTH || y > tf.GAME_HEIGHT) live = false;
+        if(!live){
+            tf.bullets.remove(this);
         }
 
     }

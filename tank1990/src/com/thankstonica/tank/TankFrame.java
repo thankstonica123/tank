@@ -17,7 +17,7 @@ public class TankFrame extends Frame{
     // int x = 200,y = 200;
     // new 出自己的tank
     Tank tank = new Tank(200,200,Direction.DOWN,this);
-    Bullet bullet = new Bullet(300,300,Direction.DOWN);
+    Bullet bullet = new Bullet(300,300,Direction.DOWN,this);
     List<Bullet> bullets = new ArrayList<Bullet>();
 
     // 坦克速度
@@ -26,7 +26,7 @@ public class TankFrame extends Frame{
     // 坦克方向
     // Direction dir = Direction.DOWN;
 
-    private static int GAME_WIDTH = 800,GAME_HEIGHT = 600;
+    public static int GAME_WIDTH = 800,GAME_HEIGHT = 600;
 
     public TankFrame(){
         this.setSize(GAME_WIDTH,GAME_HEIGHT);
@@ -45,10 +45,17 @@ public class TankFrame extends Frame{
     @Override
     public void paint(Graphics g) {
         // tank 能更好地知道如何画自己
+        Color color = g.getColor();
+        g.setColor(Color.WHITE);
+        g.drawString("字段数量："+this.bullets.size(),10,50);
+        g.setColor(color);
         tank.paint(g);
-        for(Bullet bullet:bullets){
-            bullet.paint(g);
+
+        for (int i = 0; i < bullets.size(); i++) {
+            bullets.get(i).paint(g);
         }
+
+
     }
 
     // 双缓冲消除闪烁
